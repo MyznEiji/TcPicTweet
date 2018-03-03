@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302063224) do
+ActiveRecord::Schema.define(version: 20180303051644) do
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "tweet_id",   limit: 4
+    t.text     "text",       limit: 65535
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "comments", ["tweet_id"], name: "index_comments_on_tweet_id", using: :btree
+  add_index "comments", ["user_id"], name: "index_comments_on_user_id", using: :btree
 
   create_table "tweets", force: :cascade do |t|
     t.text     "text",       limit: 65535
@@ -40,4 +51,6 @@ ActiveRecord::Schema.define(version: 20180302063224) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "comments", "tweets"
+  add_foreign_key "comments", "users"
 end
